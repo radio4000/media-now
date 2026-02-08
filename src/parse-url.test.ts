@@ -267,7 +267,11 @@ describe('parseUrl', () => {
 		})
 
 		it('parses m.soundcloud.com (mobile) URLs', () => {
-			expect(parseUrl('https://m.soundcloud.com/yayoland/yayoland-la-guerre-economique')).toEqual({
+			expect(
+				parseUrl(
+					'https://m.soundcloud.com/yayoland/yayoland-la-guerre-economique',
+				),
+			).toEqual({
 				provider: 'soundcloud',
 				id: 'yayoland/yayoland-la-guerre-economique',
 			})

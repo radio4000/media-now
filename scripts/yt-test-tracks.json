@@ -1,7 +1,5 @@
 [
   {
-    "id": "7655e9ac-bb3c-40da-9ad6-702066afc0f5",
-    "slug": "ko002",
     "title": "Snoh Aalegra - Time",
     "url": "https://www.youtube.com/watch?v=eNmVCcqLvH0&list=RDeNmVCcqLvH0&start_radio=1",
     "description": "Nu Soul | Sweden via @nomads #am voice piano #ambiant #soul",
@@ -14,14 +12,9 @@
     "duration": null,
     "playback_error": null,
     "provider": "youtube",
-    "media_id": "eNmVCcqLvH0",
-    "created_at": "2026-02-06T17:01:04.188283+00:00",
-    "updated_at": "2026-02-06T17:01:04.188283+00:00",
-    "source": "v2"
+    "media_id": "eNmVCcqLvH0"
   },
   {
-    "id": "c499c7f2-36fc-4fdc-a0df-7bac5cd90879",
-    "slug": "ko002",
     "title": "Switch Angel - Coding Trance Music from Scratch (Again )",
     "url": "https://www.youtube.com/watch?v=iu5rnQkfO6M",
     "description": "#am #pm #trance, code, teacher",
@@ -34,14 +27,9 @@
     "duration": 302,
     "playback_error": null,
     "provider": "youtube",
-    "media_id": "iu5rnQkfO6M",
-    "created_at": "2026-02-06T15:28:12.392001+00:00",
-    "updated_at": "2026-02-06T16:05:06.606495+00:00",
-    "source": "v2"
+    "media_id": "iu5rnQkfO6M"
   },
   {
-    "id": "a5a7b9f0-b34f-4321-8a0c-03f6d84f669b",
-    "slug": "ko002",
     "title": "Stan Getz & Joao Gilberto - So Danco Samba",
     "url": "https://youtu.be/POXvY53pJcQ?si=0kiiy2pBZoieHoUm",
     "description": "#am #boss #latin #jazz ",
@@ -55,14 +43,9 @@
     "duration": 226,
     "playback_error": "youtube_error_undefined",
     "provider": "youtube",
-    "media_id": "POXvY53pJcQ",
-    "created_at": "2026-01-28T09:53:50.573584+00:00",
-    "updated_at": "2026-01-28T09:53:50.573584+00:00",
-    "source": "v2"
+    "media_id": "POXvY53pJcQ"
   },
   {
-    "id": "146a49c7-8b28-4476-b3a5-b71718981830",
-    "slug": "ko002",
     "title": "Samurai Breaks - Casio Crew",
     "url": "https://www.youtube.com/watch?v=Mjl20hza484",
     "description": "#pm #jungle #breaks  #juke",
@@ -76,14 +59,9 @@
     "duration": 212,
     "playback_error": null,
     "provider": "youtube",
-    "media_id": "Mjl20hza484",
-    "created_at": "2026-01-17T09:33:48.155464+00:00",
-    "updated_at": "2026-01-19T08:48:42.569084+00:00",
-    "source": "v2"
+    "media_id": "Mjl20hza484"
   },
   {
-    "id": "fb4d1ca0-63b9-4080-a74f-74628ccc0975",
-    "slug": "ko002",
     "title": "Joy Orbison - Hyph Mngo",
     "url": "https://www.youtube.com/watch?v=2QZxRkPN14w",
     "description": "#pm #uk-garage #dubstep",
@@ -96,14 +74,9 @@
     "duration": 338,
     "playback_error": "youtube_error_undefined",
     "provider": "youtube",
-    "media_id": "2QZxRkPN14w",
-    "created_at": "2026-01-15T17:56:07.169856+00:00",
-    "updated_at": "2026-01-27T13:43:47.802216+00:00",
-    "source": "v2"
+    "media_id": "2QZxRkPN14w"
   },
   {
-    "id": "494cd019-8deb-49a0-961d-d0b8601de040",
-    "slug": "ko002",
     "title": "Boo Williams - Teckno Drome",
     "url": "https://youtu.be/VZ94gQQcVRo",
     "description": "#pm #techno #house #dubbed chords",
@@ -117,14 +90,9 @@
     "duration": 387,
     "playback_error": "youtube_error_undefined",
     "provider": "youtube",
-    "media_id": "VZ94gQQcVRo",
-    "created_at": "2026-01-15T10:35:33.429134+00:00",
-    "updated_at": "2026-01-27T13:43:29.182612+00:00",
-    "source": "v2"
+    "media_id": "VZ94gQQcVRo"
   },
   {
-    "id": "558412ce-3969-4d19-a20a-602cd6f2f3d9",
-    "slug": "ko002",
     "title": "Moby - Next Is the E (Synthe Mix)",
     "url": "https://www.youtube.com/watch?v=1VOVf13n38k",
     "description": "#pm #house #breaks #ravey thx Dr. Rubinstein",
@@ -138,14 +106,9 @@
     "duration": 420,
     "playback_error": "youtube_error_undefined",
     "provider": "youtube",
-    "media_id": "1VOVf13n38k",
-    "created_at": "2026-01-14T18:06:50.127845+00:00",
-    "updated_at": "2026-01-27T13:43:30.663537+00:00",
-    "source": "v2"
+    "media_id": "1VOVf13n38k"
   },
   {
-    "id": "7306f166-43dc-4ede-b713-2e559910a4a1",
-    "slug": "ko002",
     "title": "Livin' Large - The Second Coming",
     "url": "https://www.youtube.com/watch?v=NDdMveBbBUo",
     "description": "#pm #dubbed #house thx Daisy Weweh (HÖR)",
@@ -158,14 +121,9 @@
     "duration": 421,
     "playback_error": "youtube_error_undefined",
     "provider": "youtube",
-    "media_id": "NDdMveBbBUo",
-    "created_at": "2026-01-14T17:32:56.2271+00:00",
-    "updated_at": "2026-01-27T13:43:32.156535+00:00",
-    "source": "v2"
+    "media_id": "NDdMveBbBUo"
   },
   {
-    "id": "549f746a-26ef-49a2-9ec5-01d5ee42637f",
-    "slug": "ko002",
     "title": "Mount Rushmore – I've Got The Music (EFX Mix)",
     "url": "https://www.youtube.com/watch?v=oqzfbwcVqvc",
     "description": "#pm #dubbed #house txh Eris Drew RA",
@@ -178,14 +136,9 @@
     "duration": 335,
     "playback_error": "youtube_error_undefined",
     "provider": "youtube",
-    "media_id": "oqzfbwcVqvc",
-    "created_at": "2026-01-14T17:14:10.209458+00:00",
-    "updated_at": "2026-01-27T13:43:32.89909+00:00",
-    "source": "v2"
+    "media_id": "oqzfbwcVqvc"
   },
   {
-    "id": "e945a8d7-3e32-4b9b-bf55-5c925d545525",
-    "slug": "ko002",
     "title": "Simon Foy - Inside Out (Freefall Mix)",
     "url": "https://www.youtube.com/watch?v=KRcDbJQKpRo",
     "description": "#pm #trance, thx DRIFT KYIV - Supergloss (HÖR)",
@@ -197,9 +150,6 @@
     "duration": 391,
     "playback_error": "youtube_error_undefined",
     "provider": "youtube",
-    "media_id": "KRcDbJQKpRo",
-    "created_at": "2026-01-14T16:37:13.070434+00:00",
-    "updated_at": "2026-01-27T13:43:34.47161+00:00",
-    "source": "v2"
+    "media_id": "KRcDbJQKpRo"
   }
 ]

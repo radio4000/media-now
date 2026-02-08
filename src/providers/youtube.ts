@@ -3,7 +3,11 @@
  */
 
 import { MediaNotFoundError, ProviderError } from '../errors'
-import type { SearchResult, YouTubeResult } from '../types'
+import type {
+	SearchResult,
+	YouTubeExtendedResult,
+	YouTubeResult,
+} from '../types'
 
 /** YouTube oEmbed API response */
 interface OEmbedResponse {
@@ -80,15 +84,9 @@ export function parseEmbeddedJson(
 	}
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/** Extract music card data from ytInitialData engagement panels */
-export function extractMusicCard(ytData: any): {
-	song: string
-	artist: string
-	album?: string
-	thumbnailAlbum?: string
-} | null {
+/** Extract watch page enrichment data from ytInitialData engagement panels */
+function extractWatchPageData(ytData: any): WatchPageData {
+	const data: WatchPageData = {}
 	const panels = ytData?.engagementPanels ?? []
 	for (const panel of panels) {
 		const items =
@@ -96,45 +94,29 @@ export function extractMusicCard(ytData: any): {
 				?.structuredDescriptionContentRenderer?.items
 		if (!items) continue
 		for (const item of items) {
-			if (!item.horizontalCardListRenderer) continue
+			// Music card
 			const hcl = item.horizontalCardListRenderer
-			const header =
-				hcl?.header?.richListHeaderRenderer?.title?.simpleText
-			if (header !== 'Music') continue
-			const vm = hcl?.cards?.[0]?.videoAttributeViewModel
-			if (!vm?.title || !vm?.subtitle) return null
-			return {
-				song: vm.title,
-				artist: vm.subtitle,
-				album: vm.secondarySubtitle?.content,
-				thumbnailAlbum: vm.image?.sources?.[0]?.url,
+			if (hcl) {
+				const header = hcl?.header?.richListHeaderRenderer?.title?.simpleText
+				if (header === 'Music') {
+					const vm = hcl?.cards?.[0]?.videoAttributeViewModel
+					if (vm?.title && vm?.subtitle) {
+						data.song = vm.title
+						data.artist = vm.subtitle
+						data.album = vm.secondarySubtitle?.content
+						data.thumbnailAlbum = vm.image?.sources?.[0]?.url
+					}
+				}
 			}
-		}
-	}
-	return null
-}
-
-/** Extract description header (channel, publish date) from ytInitialData */
-export function extractDescHeader(ytData: any): {
-	channel?: string
-	publishDate?: string
-} | null {
-	const panels = ytData?.engagementPanels ?? []
-	for (const panel of panels) {
-		const items =
-			panel?.engagementPanelSectionListRenderer?.content
-				?.structuredDescriptionContentRenderer?.items
-		if (!items) continue
-		for (const item of items) {
-			if (!item.videoDescriptionHeaderRenderer) continue
+			// Description header
 			const hdr = item.videoDescriptionHeaderRenderer
-			return {
-				channel: hdr?.channel?.simpleText,
-				publishDate: hdr?.publishDate?.simpleText,
+			if (hdr) {
+				data.channel = hdr?.channel?.simpleText
+				data.publishDate = hdr?.publishDate?.simpleText
 			}
 		}
 	}
-	return null
+	return data
 }
 
 /** Fetch and parse YouTube watch page for enrichment data */
@@ -142,8 +124,7 @@ async function fetchWatchPage(id: string): Promise<WatchPageData> {
 	try {
 		const response = await globalThis.fetch(buildVideoUrl(id), {
 			headers: {
-				'User-Agent':
-					'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36',
+				'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36',
 				'Accept-Language': 'en-US,en;q=0.9',
 			},
 		})
@@ -153,21 +134,7 @@ async function fetchWatchPage(id: string): Promise<WatchPageData> {
 		const ytData = parseEmbeddedJson(html, 'ytInitialData')
 		if (!ytData) return {}
 
-		const music = extractMusicCard(ytData)
-		const desc = extractDescHeader(ytData)
-
-		return {
-			...(music && {
-				song: music.song,
-				artist: music.artist,
-				album: music.album,
-				thumbnailAlbum: music.thumbnailAlbum,
-			}),
-			...(desc && {
-				channel: desc.channel,
-				publishDate: desc.publishDate,
-			}),
-		}
+		return extractWatchPageData(ytData)
 	} catch {
 		return {}
 	}
@@ -214,11 +181,10 @@ export const fetch = async (id: string): Promise<YouTubeResult> => {
 }
 
 /** Fetch YouTube video metadata via oEmbed + watch page enrichment (slower) */
-export const fetchExtended = async (id: string): Promise<YouTubeResult> => {
-	const [base, watchData] = await Promise.all([
-		fetch(id),
-		fetchWatchPage(id),
-	])
+export const fetchExtended = async (
+	id: string,
+): Promise<YouTubeExtendedResult> => {
+	const [base, watchData] = await Promise.all([fetch(id), fetchWatchPage(id)])
 
 	return { ...base, ...watchData }
 }

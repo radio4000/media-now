@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import {
-	extractDescHeader,
-	extractMusicCard,
-	parseEmbeddedJson,
-	fetchExtended,
-} from './youtube'
+import { fetchExtended, parseEmbeddedJson, youtube } from './youtube'
 
 describe('parseEmbeddedJson', () => {
 	it('extracts a JSON object from a var assignment', () => {
@@ -37,218 +32,60 @@ describe('parseEmbeddedJson', () => {
 	})
 })
 
-describe('extractMusicCard', () => {
-	it('extracts song, artist, album from music card structure', () => {
-		const ytData = {
-			engagementPanels: [
-				{
-					engagementPanelSectionListRenderer: {
-						content: {
-							structuredDescriptionContentRenderer: {
-								items: [
-									{
-										horizontalCardListRenderer: {
-											header: {
-												richListHeaderRenderer: {
-													title: { simpleText: 'Music' },
-												},
-											},
-											cards: [
-												{
-													videoAttributeViewModel: {
-														title: 'Never Gonna Give You Up',
-														subtitle: 'Rick Astley',
-														secondarySubtitle: {
-															content: 'Whenever You Need Somebody',
-														},
-														image: {
-															sources: [
-																{
-																	url: 'https://lh3.googleusercontent.com/album-art',
-																},
-															],
-														},
-													},
-												},
-											],
-										},
-									},
-								],
-							},
-						},
-					},
-				},
-			],
-		}
-
-		const result = extractMusicCard(ytData)
-		expect(result).toEqual({
-			song: 'Never Gonna Give You Up',
-			artist: 'Rick Astley',
-			album: 'Whenever You Need Somebody',
-			thumbnailAlbum: 'https://lh3.googleusercontent.com/album-art',
-		})
-	})
-
-	it('returns null when no music card exists', () => {
-		const ytData = { engagementPanels: [] }
-		expect(extractMusicCard(ytData)).toBeNull()
-	})
-
-	it('returns null when header is not Music', () => {
-		const ytData = {
-			engagementPanels: [
-				{
-					engagementPanelSectionListRenderer: {
-						content: {
-							structuredDescriptionContentRenderer: {
-								items: [
-									{
-										horizontalCardListRenderer: {
-											header: {
-												richListHeaderRenderer: {
-													title: { simpleText: 'Other' },
-												},
-											},
-											cards: [],
-										},
-									},
-								],
-							},
-						},
-					},
-				},
-			],
-		}
-		expect(extractMusicCard(ytData)).toBeNull()
-	})
-
-	it('returns null when card has no title/subtitle', () => {
-		const ytData = {
-			engagementPanels: [
-				{
-					engagementPanelSectionListRenderer: {
-						content: {
-							structuredDescriptionContentRenderer: {
-								items: [
-									{
-										horizontalCardListRenderer: {
-											header: {
-												richListHeaderRenderer: {
-													title: { simpleText: 'Music' },
-												},
-											},
-											cards: [{ videoAttributeViewModel: {} }],
-										},
-									},
-								],
-							},
-						},
-					},
-				},
-			],
-		}
-		expect(extractMusicCard(ytData)).toBeNull()
-	})
-
-	it('handles missing album and thumbnailAlbum', () => {
-		const ytData = {
-			engagementPanels: [
-				{
-					engagementPanelSectionListRenderer: {
-						content: {
-							structuredDescriptionContentRenderer: {
-								items: [
-									{
-										horizontalCardListRenderer: {
-											header: {
-												richListHeaderRenderer: {
-													title: { simpleText: 'Music' },
-												},
-											},
-											cards: [
-												{
-													videoAttributeViewModel: {
-														title: 'Song Title',
-														subtitle: 'Artist Name',
-													},
-												},
-											],
-										},
-									},
-								],
-							},
-						},
-					},
-				},
-			],
-		}
-
-		const result = extractMusicCard(ytData)
-		expect(result).toEqual({
-			song: 'Song Title',
-			artist: 'Artist Name',
-			album: undefined,
-			thumbnailAlbum: undefined,
-		})
-	})
-})
-
-describe('extractDescHeader', () => {
-	it('extracts channel and publishDate', () => {
-		const ytData = {
-			engagementPanels: [
-				{
-					engagementPanelSectionListRenderer: {
-						content: {
-							structuredDescriptionContentRenderer: {
-								items: [
-									{
-										videoDescriptionHeaderRenderer: {
-											channel: { simpleText: 'Rick Astley' },
-											publishDate: { simpleText: 'Oct 25, 2009' },
-										},
-									},
-								],
-							},
-						},
-					},
-				},
-			],
-		}
-
-		const result = extractDescHeader(ytData)
-		expect(result).toEqual({
-			channel: 'Rick Astley',
-			publishDate: 'Oct 25, 2009',
-		})
-	})
-
-	it('returns null when no desc header exists', () => {
-		const ytData = { engagementPanels: [] }
-		expect(extractDescHeader(ytData)).toBeNull()
-	})
-})
-
-describe('fetch (integration)', { timeout: 15000 }, () => {
-	it('returns enriched result for Rick Astley - Never Gonna Give You Up', async () => {
+describe('fetchExtended (integration)', { timeout: 30000 }, () => {
+	it('returns music card data for an official music video', async () => {
 		const result = await fetchExtended('dQw4w9WgXcQ')
 
-		// oEmbed fields always present
+		// oEmbed basics
 		expect(result.provider).toBe('youtube')
 		expect(result.id).toBe('dQw4w9WgXcQ')
 		expect(result.title).toContain('Never Gonna Give You Up')
 		expect(result.author).toBeDefined()
 		expect(result.thumbnail).toBeDefined()
 
-		// watch page enrichment — music card
+		// Music card enrichment
 		expect(result.song).toContain('Never Gonna Give You Up')
 		expect(result.artist).toBe('Rick Astley')
 		expect(result.album).toBeDefined()
 		expect(result.thumbnailAlbum).toBeDefined()
 
-		// watch page enrichment — desc header
+		// Desc header enrichment
 		expect(result.channel).toBeDefined()
 		expect(result.publishDate).toBeDefined()
+	})
+
+	it('returns music card data for a Topic channel video', async () => {
+		// Topic channels are auto-generated by YouTube for licensed music
+		const result = await fetchExtended('eNmVCcqLvH0')
+
+		expect(result.provider).toBe('youtube')
+		expect(result.id).toBe('eNmVCcqLvH0')
+		expect(result.song).toBeDefined()
+		expect(result.artist).toBeDefined()
+		expect(result.channel).toBeDefined()
+	})
+
+	it('gracefully returns no music card for a non-music video', async () => {
+		// A coding livestream — no music card expected
+		const result = await fetchExtended('iu5rnQkfO6M')
+
+		expect(result.provider).toBe('youtube')
+		expect(result.id).toBe('iu5rnQkfO6M')
+		expect(result.title).toBeDefined()
+		// No music card, so these should be absent
+		expect(result.song).toBeUndefined()
+		expect(result.artist).toBeUndefined()
+	})
+})
+
+describe('fetch (integration)', { timeout: 15000 }, () => {
+	it('returns oEmbed metadata', async () => {
+		const result = await youtube.fetch('dQw4w9WgXcQ')
+
+		expect(result.provider).toBe('youtube')
+		expect(result.id).toBe('dQw4w9WgXcQ')
+		expect(result.title).toContain('Never Gonna Give You Up')
+		expect(result.author).toBeDefined()
+		expect(result.thumbnail).toContain('http')
 	})
 })

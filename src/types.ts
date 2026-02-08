@@ -21,12 +21,16 @@ export interface MediaResult {
 	payload: unknown
 }
 
-/** YouTube media result */
+/** YouTube media result - basic fields from oEmbed */
 export interface YouTubeResult extends MediaResult {
 	provider: 'youtube'
 	thumbnail: string
 	author: string
 	duration?: number
+}
+
+/** YouTube media result with enriched metadata from watch page */
+export interface YouTubeExtendedResult extends YouTubeResult {
 	/** Song name from YouTube music card */
 	song?: string
 	/** Artist from YouTube music card */
