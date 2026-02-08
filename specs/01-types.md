@@ -22,7 +22,7 @@
 - `SoundCloudResult` - extends MediaResult: thumbnail?, author, description?
 - `SearchResult` - provider, id, title, thumbnail?, url
 - `ParsedTitle` - artist (nullable), title, original
-- `ParsedUrl` - { provider: Provider, id: string }
+- `ParsedUrl` - { provider: Provider, id: string, kind?: string }
 
 ## Error Classes
 

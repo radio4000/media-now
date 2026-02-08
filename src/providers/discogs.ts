@@ -119,42 +119,30 @@ const extractArtists = (artists?: { name: string }[]): string[] =>
 const extractLabels = (labels?: { name: string }[]): string[] =>
 	labels?.map((l) => l.name) ?? []
 
-/** Fetch Discogs release metadata */
-export const fetch = async (id: string): Promise<DiscogsResult> => {
-	const response = await fetchDiscogs(`/releases/${id}`)
-	const payload = (await response.json()) as DiscogsReleaseResponse
+/** Fetch Discogs release or master metadata */
+export const fetch = async (
+	id: string,
+	kind: string = 'release',
+): Promise<DiscogsResult> => {
+	const isMaster = kind === 'master'
+	const endpoint = isMaster ? `/masters/${id}` : `/releases/${id}`
+	const response = await fetchDiscogs(endpoint)
+	const payload = (await response.json()) as
+		| DiscogsReleaseResponse
+		| DiscogsMasterResponse
 
 	return {
 		provider: 'discogs',
 		id,
-		url: buildReleaseUrl(id),
+		url: isMaster ? buildMasterUrl(id) : buildReleaseUrl(id),
 		title: payload.title,
 		year: payload.year,
 		genres: payload.genres ?? [],
 		styles: payload.styles ?? [],
 		artists: extractArtists(payload.artists),
-		labels: extractLabels(payload.labels),
+		labels: extractLabels('labels' in payload ? payload.labels : undefined),
 		payload,
 	}
 }
 
-/** Fetch Discogs master release metadata */
-export const fetchMaster = async (id: string): Promise<DiscogsResult> => {
-	const response = await fetchDiscogs(`/masters/${id}`)
-	const payload = (await response.json()) as DiscogsMasterResponse
-
-	return {
-		provider: 'discogs',
-		id,
-		url: buildMasterUrl(id),
-		title: payload.title,
-		year: payload.year,
-		genres: payload.genres ?? [],
-		styles: payload.styles ?? [],
-		artists: extractArtists(payload.artists),
-		labels: [], // Masters don't have labels
-		payload,
-	}
-}
-
-export const discogs = { parseUrl, fetch, fetchMaster }
+export const discogs = { parseUrl, fetch }

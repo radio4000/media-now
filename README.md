@@ -56,8 +56,9 @@ musicbrainz.fetchRelease(id)
 To validate the project
 
 ```sh
-bun run build
+bun run check
 bun test
+bun run build
 ```
 
 ## Releasing
