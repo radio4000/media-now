@@ -14,7 +14,7 @@ import type { MediaResult, Provider } from './types'
 /** Provider handlers mapped by name */
 const providers: Record<
 	Provider,
-	((id: string) => Promise<MediaResult>) | null
+	((id: string, kind?: string) => Promise<MediaResult>) | null
 > = {
 	youtube: youtube.fetch,
 	vimeo: vimeo.fetch,
@@ -49,5 +49,5 @@ export const getMedia = async (
 		)
 	}
 
-	return handler(parsed.id)
+	return handler(parsed.id, parsed.kind)
 }

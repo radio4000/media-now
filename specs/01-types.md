@@ -21,7 +21,7 @@
 - `MusicBrainzRelease` - id, title, url, relations[], payload
 - `SoundCloudResult` - extends MediaResult: thumbnail?, author, description?
 - `ParsedTitle` - artist (nullable), title, original
-- `ParsedUrl` - { provider: Provider, id: string }
+- `ParsedUrl` - { provider: Provider, id: string, kind?: string }
 
 ## Error Classes
 

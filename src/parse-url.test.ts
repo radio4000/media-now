@@ -206,6 +206,7 @@ describe('parseUrl', () => {
 			expect(parseUrl('https://www.discogs.com/release/12345')).toEqual({
 				provider: 'discogs',
 				id: '12345',
+				kind: 'release',
 			})
 		})
 
@@ -215,6 +216,7 @@ describe('parseUrl', () => {
 			).toEqual({
 				provider: 'discogs',
 				id: '12345',
+				kind: 'release',
 			})
 		})
 
@@ -222,6 +224,7 @@ describe('parseUrl', () => {
 			expect(parseUrl('https://discogs.com/master/67890')).toEqual({
 				provider: 'discogs',
 				id: '67890',
+				kind: 'master',
 			})
 		})
 
@@ -231,6 +234,7 @@ describe('parseUrl', () => {
 			).toEqual({
 				provider: 'discogs',
 				id: '12345',
+				kind: 'release',
 			})
 		})
 
@@ -240,6 +244,7 @@ describe('parseUrl', () => {
 			).toEqual({
 				provider: 'discogs',
 				id: '67890',
+				kind: 'master',
 			})
 		})
 	})

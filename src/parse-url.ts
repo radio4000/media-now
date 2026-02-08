@@ -8,6 +8,8 @@ import type { Provider } from './types'
 export interface ParsedUrl {
 	provider: Provider
 	id: string
+	/** Resource kind within a provider (e.g. 'release' | 'master' for Discogs) */
+	kind?: string
 }
 
 /**
@@ -130,7 +132,7 @@ const parseDiscogs = (url: URL): ParsedUrl | null => {
 	// Or with locale: /{locale}/release/{id}, /{locale}/master/{id}
 	// ID may be followed by slug: /release/12345-Artist-Album
 	const match = url.pathname.match(/(?:^|\/)(release|master)\/(\d+)/)
-	if (match?.[2]) return { provider: 'discogs', id: match[2] }
+	if (match?.[2]) return { provider: 'discogs', id: match[2], kind: match[1] }
 
 	return null
 }
