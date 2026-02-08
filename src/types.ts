@@ -25,7 +25,7 @@ export interface MediaResult {
 export interface YouTubeResult extends MediaResult {
 	provider: 'youtube'
 	thumbnail: string
-	author: string
+	author?: string
 	duration?: number
 }
 
@@ -96,15 +96,6 @@ export interface SoundCloudResult extends MediaResult {
 	thumbnail?: string
 	author: string
 	description?: string
-}
-
-/** Search result from any provider */
-export interface SearchResult {
-	provider: Provider
-	id: string
-	title: string
-	thumbnail?: string
-	url: string
 }
 
 /** Result of parsing an "Artist - Title" string */

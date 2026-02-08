@@ -39,11 +39,12 @@ import { discogs } from 'media-now/providers/discogs'
 import { musicbrainz } from 'media-now/providers/musicbrainz'
 import { soundcloud } from 'media-now/providers/soundcloud'
 
-youtube.fetch(id)
+youtube.fetch(id)              // ~100ms - basic metadata via oEmbed
+youtube.fetchExtended(id)      // ~1s - includes music card data (song, artist, album)
 youtube.search(query)
 vimeo.fetch(id)
 spotify.fetch(id)
-soundcloud.fetch(id) // id is 'user/track'
+soundcloud.fetch(id)           // id is 'user/track'
 discogs.fetch(id)
 discogs.fetchMaster(id)
 musicbrainz.search(query)

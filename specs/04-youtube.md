@@ -8,7 +8,7 @@
 
 - Create `src/providers/youtube.ts`
 - `fetch(id)` → `YouTubeResult` - fetch video metadata via oEmbed
-- `search(query)` → `SearchResult[]` - search videos via youtubei endpoint
+- `search(query)` → `YouTubeResult[]` - search videos via youtubei endpoint
 
 ## API Endpoints
 

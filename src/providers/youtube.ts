@@ -3,11 +3,7 @@
  */
 
 import { MediaNotFoundError, ProviderError } from '../errors'
-import type {
-	SearchResult,
-	YouTubeExtendedResult,
-	YouTubeResult,
-} from '../types'
+import type { YouTubeExtendedResult, YouTubeResult } from '../types'
 
 /** YouTube oEmbed API response */
 interface OEmbedResponse {
@@ -49,16 +45,6 @@ interface YouTubeiResponse {
 	}
 }
 
-/** Watch page enrichment fields */
-interface WatchPageData {
-	song?: string
-	artist?: string
-	album?: string
-	thumbnailAlbum?: string
-	channel?: string
-	publishDate?: string
-}
-
 /** Extract a JSON variable assignment from YouTube HTML via brace-counting */
 export function parseEmbeddedJson(
 	html: string,
@@ -85,8 +71,8 @@ export function parseEmbeddedJson(
 }
 
 /** Extract watch page enrichment data from ytInitialData engagement panels */
-function extractWatchPageData(ytData: any): WatchPageData {
-	const data: WatchPageData = {}
+function extractWatchPageData(ytData: any) {
+	const data: Record<string, string | undefined> = {}
 	const panels = ytData?.engagementPanels ?? []
 	for (const panel of panels) {
 		const items =
@@ -120,7 +106,7 @@ function extractWatchPageData(ytData: any): WatchPageData {
 }
 
 /** Fetch and parse YouTube watch page for enrichment data */
-async function fetchWatchPage(id: string): Promise<WatchPageData> {
+async function fetchWatchPage(id: string) {
 	try {
 		const response = await globalThis.fetch(buildVideoUrl(id), {
 			headers: {
@@ -190,7 +176,7 @@ export const fetchExtended = async (
 }
 
 /** Search YouTube videos via youtubei endpoint */
-export const search = async (query: string): Promise<SearchResult[]> => {
+export const search = async (query: string): Promise<YouTubeResult[]> => {
 	const url = `${YOUTUBEI_URL}?key=${YOUTUBEI_KEY}`
 
 	const response = await globalThis
@@ -226,7 +212,7 @@ export const search = async (query: string): Promise<SearchResult[]> => {
 		payload.contents?.twoColumnSearchResultsRenderer?.primaryContents
 			?.sectionListRenderer?.contents ?? []
 
-	const results: SearchResult[] = contents
+	const results: YouTubeResult[] = contents
 		.flatMap((section) => section.itemSectionRenderer?.contents ?? [])
 		.filter(
 			(
@@ -242,6 +228,7 @@ export const search = async (query: string): Promise<SearchResult[]> => {
 				title: video.title.runs.map((r) => r.text).join(''),
 				thumbnail: video.thumbnail.thumbnails[0]?.url,
 				url: buildVideoUrl(video.videoId),
+				payload: item.videoRenderer,
 			}
 		})
 
