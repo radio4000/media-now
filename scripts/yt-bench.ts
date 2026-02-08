@@ -3,7 +3,7 @@
  * Run: bun run scripts/yt-bench.ts
  */
 
-import tracks from './yt-probe/yt-test-tracks.json'
+import tracks from './yt-test-tracks.json'
 
 const OEMBED_URL = 'https://www.youtube.com/oembed'
 const ids = tracks.map((t) => t.media_id)
