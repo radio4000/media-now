@@ -26,7 +26,8 @@ export const parseUrl = (url: string): ParsedUrl | null => {
 			parseVimeo(parsed) ??
 			parseSpotify(parsed) ??
 			parseDiscogs(parsed) ??
-			parseSoundCloud(parsed)
+			parseSoundCloud(parsed) ??
+			parseFile(parsed)
 		)
 	} catch {
 		return null
@@ -178,4 +179,37 @@ const parseSoundCloud = (url: URL): ParsedUrl | null => {
 
 	// The ID is username/track-slug
 	return { provider: 'soundcloud', id: `${username}/${trackSlug}` }
+}
+
+/** Audio file extensions */
+const AUDIO_EXT_RE =
+	/\.(mp3|m4a|aac|mid|midi|ogg|oga|wav|flac|opus|weba)(?:$|[?#])/i
+
+/** Video file extensions (browser-playable formats) */
+const VIDEO_EXT_RE = /\.(mp4|webm|ogv)(?:$|[?#])/i
+
+/**
+ * Parse direct audio/video file URLs (self-hosted, CDN, etc.)
+ * The ID is the full URL since there's no extractable media ID.
+ */
+const parseFile = (url: URL): ParsedUrl | null => {
+	const href = url.href
+	let decodedPathname: string | undefined
+	try {
+		decodedPathname = decodeURIComponent(url.pathname)
+	} catch {
+		// ignore decode errors
+	}
+
+	// Check audio first, then video
+	for (const [re, kind] of [
+		[AUDIO_EXT_RE, 'audio'],
+		[VIDEO_EXT_RE, 'video'],
+	] as const) {
+		if (re.test(href)) return { provider: 'file', id: href, kind }
+		if (decodedPathname && re.test(decodedPathname))
+			return { provider: 'file', id: href, kind }
+	}
+
+	return null
 }

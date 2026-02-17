@@ -10,6 +10,7 @@ export type Provider =
 	| 'discogs'
 	| 'musicbrainz'
 	| 'soundcloud'
+	| 'file'
 
 /** Base interface for all media results */
 export interface MediaResult {
@@ -96,6 +97,13 @@ export interface SoundCloudResult extends MediaResult {
 	thumbnail?: string
 	author: string
 	description?: string
+}
+
+/** Direct file media result (audio/video URLs) */
+export interface FileResult extends MediaResult {
+	provider: 'file'
+	/** 'audio' or 'video' based on file extension */
+	kind: 'audio' | 'video'
 }
 
 /** Result of parsing an "Artist - Title" string */

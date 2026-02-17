@@ -295,6 +295,60 @@ describe('parseUrl', () => {
 		})
 	})
 
+	describe('File (audio)', () => {
+		const audioUrls: [string, string][] = [
+			['https://example.com/song.mp3', '.mp3'],
+			['https://cdn.example.com/music/track.flac', '.flac'],
+			['https://example.com/audio.ogg', '.ogg'],
+			['https://example.com/sample.wav', '.wav'],
+			['https://example.com/podcast.m4a', '.m4a'],
+			['https://example.com/voice.opus', '.opus'],
+			['https://cdn.example.com/file.mp3?token=abc', '.mp3 with query params'],
+			['https://example.com/my%20song.mp3', 'URL-encoded path'],
+		]
+
+		it.each(audioUrls)('parses %s (%s)', (url) => {
+			const result = parseUrl(url)
+			expect(result?.provider).toBe('file')
+			expect(result?.kind).toBe('audio')
+			expect(result?.id).toBe(url)
+		})
+
+		it('parses audio URLs without protocol', () => {
+			const result = parseUrl('example.com/song.mp3')
+			expect(result?.provider).toBe('file')
+			expect(result?.kind).toBe('audio')
+		})
+
+		it('parses audio URLs with fragment', () => {
+			const result = parseUrl('https://example.com/song.mp3#t=10')
+			expect(result?.provider).toBe('file')
+			expect(result?.kind).toBe('audio')
+		})
+	})
+
+	describe('File (video)', () => {
+		const videoUrls: [string, string][] = [
+			['https://example.com/clip.mp4', '.mp4'],
+			['https://cdn.example.com/video.webm', '.webm'],
+			['https://example.com/movie.ogv', '.ogv'],
+			['https://cdn.example.com/video.mp4?token=abc', '.mp4 with query params'],
+		]
+
+		it.each(videoUrls)('parses %s (%s)', (url) => {
+			const result = parseUrl(url)
+			expect(result?.provider).toBe('file')
+			expect(result?.kind).toBe('video')
+			expect(result?.id).toBe(url)
+		})
+
+		it('rejects non-media files', () => {
+			expect(parseUrl('https://example.com/image.jpg')).toBeNull()
+			expect(parseUrl('https://example.com/document.pdf')).toBeNull()
+			expect(parseUrl('https://example.com/style.css')).toBeNull()
+		})
+	})
+
 	describe('Edge cases', () => {
 		it('returns null for invalid URLs', () => {
 			expect(parseUrl('not a url')).toBeNull()
