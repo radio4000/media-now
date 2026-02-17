@@ -2,7 +2,7 @@
 
 # Media Now
 
-Parse URLs to extract provider and identifier. Fetch metadata from YouTube, Vimeo, Spotify, Discogs, MusicBrainz, and SoundCloud. No API keys.
+Parse URLs to extract provider and identifier. Fetch metadata from YouTube, Vimeo, Spotify, Discogs, MusicBrainz, SoundCloud, and direct audio/video files. No API keys.
 
 Meant to be useful for people dealing with music tracks in one shape or another (hello https://radio4000.com).
 
@@ -19,6 +19,9 @@ parseTitle('Nikolaj Nørlund - Hvid røg og tekno')
 
 parseUrl('https://vimeo.com/123456789')
 // { provider: 'vimeo', id: '123456789' }
+
+parseUrl('https://example.com/song.mp3')
+// { provider: 'file', id: 'https://example.com/song.mp3', kind: 'audio' }
 
 await getMedia('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
 // { provider, id, url, title, thumbnail, author, payload }
@@ -38,6 +41,7 @@ import { spotify } from 'media-now/providers/spotify'
 import { discogs } from 'media-now/providers/discogs'
 import { musicbrainz } from 'media-now/providers/musicbrainz'
 import { soundcloud } from 'media-now/providers/soundcloud'
+import { file } from 'media-now/providers/file'
 
 youtube.fetch(id)              // ~100ms - basic metadata via oEmbed
 youtube.fetchExtended(id)      // ~1s - includes music card data (song, artist, album)
@@ -50,6 +54,7 @@ discogs.fetchMaster(id)
 musicbrainz.search(query)
 musicbrainz.fetchRecording(id)
 musicbrainz.fetchRelease(id)
+file.fetch(url, kind)          // kind is 'audio' or 'video', title extracted from filename
 ```
 
 ## Development

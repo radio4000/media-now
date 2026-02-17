@@ -1,6 +1,6 @@
 {
   "name": "media-now",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Fetch media information from YouTube, Vimeo, Spotify and Discogs",
   "repository": {
     "type": "git",
