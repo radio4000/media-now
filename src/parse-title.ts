@@ -12,8 +12,9 @@ const PRIMARY_SEP = /\s+[-–—]+\s+/
 
 /**
  * Secondary separators (non-dash)
+ * Includes middle dot (·) used by YouTube as artist · title separator
  */
-const SECONDARY_SEPARATORS = [': ', ' | ']
+const SECONDARY_SEPARATORS = [' · ', ': ', ' | ']
 
 /**
  * Lenient separator: dash with space on at least one side
