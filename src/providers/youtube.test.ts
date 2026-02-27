@@ -4,13 +4,19 @@ import { fetchExtended, parseEmbeddedJson, youtube } from './youtube'
 describe('parseEmbeddedJson', () => {
 	it('extracts a JSON object from a var assignment', () => {
 		const html = 'var ytInitialData = {"key":"value"};'
-		const result = parseEmbeddedJson(html, 'ytInitialData') as any
+		const result = parseEmbeddedJson(html, 'ytInitialData') as Record<
+			string,
+			unknown
+		>
 		expect(result).toEqual({ key: 'value' })
 	})
 
 	it('handles nested objects', () => {
 		const html = 'var ytInitialData = {"a":{"b":{"c":1}}};'
-		const result = parseEmbeddedJson(html, 'ytInitialData') as any
+		const result = parseEmbeddedJson(html, 'ytInitialData') as Record<
+			string,
+			unknown
+		>
 		expect(result).toEqual({ a: { b: { c: 1 } } })
 	})
 
@@ -27,7 +33,10 @@ describe('parseEmbeddedJson', () => {
 	it('handles surrounding HTML content', () => {
 		const html =
 			'<script>var foo = 1; var ytInitialData = {"ok":true}; var bar = 2;</script>'
-		const result = parseEmbeddedJson(html, 'ytInitialData') as any
+		const result = parseEmbeddedJson(html, 'ytInitialData') as Record<
+			string,
+			unknown
+		>
 		expect(result).toEqual({ ok: true })
 	})
 })

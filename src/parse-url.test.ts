@@ -121,6 +121,56 @@ describe('parseUrl', () => {
 		it('rejects invalid IDs (bad characters)', () => {
 			expect(parseUrl('https://youtube.com/watch?v=abc123!@#$%')).toBeNull()
 		})
+
+		it('parses /channel/{id} URLs', () => {
+			expect(
+				parseUrl('https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw'),
+			).toEqual({
+				provider: 'youtube',
+				id: 'UCuAXFkgsw1L7xaCfnd5JJOw',
+				kind: 'channel',
+			})
+		})
+
+		it('parses /@handle URLs', () => {
+			expect(parseUrl('https://www.youtube.com/@MrBeast')).toEqual({
+				provider: 'youtube',
+				id: '@MrBeast',
+				kind: 'channel',
+			})
+		})
+
+		it('parses /playlist?list= URLs', () => {
+			expect(
+				parseUrl(
+					'https://www.youtube.com/playlist?list=PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
+				),
+			).toEqual({
+				provider: 'youtube',
+				id: 'PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf',
+				kind: 'playlist',
+			})
+		})
+
+		it('parses studio.youtube.com URLs', () => {
+			expect(
+				parseUrl('https://studio.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw'),
+			).toEqual({
+				provider: 'youtube',
+				id: 'UCuAXFkgsw1L7xaCfnd5JJOw',
+				kind: 'channel',
+			})
+		})
+
+		it('rejects YouTube search URLs', () => {
+			expect(
+				parseUrl('https://www.youtube.com/results?search_query=test'),
+			).toBeNull()
+		})
+
+		it('rejects YouTube feed/history URLs', () => {
+			expect(parseUrl('https://www.youtube.com/feed/history')).toBeNull()
+		})
 	})
 
 	describe('Vimeo', () => {
@@ -282,8 +332,18 @@ describe('parseUrl', () => {
 			})
 		})
 
-		it('rejects profile-only URLs', () => {
-			expect(parseUrl('https://soundcloud.com/artist')).toBeNull()
+		it('parses profile URLs', () => {
+			expect(parseUrl('https://soundcloud.com/ghostculture')).toEqual({
+				provider: 'soundcloud',
+				id: 'ghostculture',
+				kind: 'profile',
+			})
+		})
+
+		it('rejects reserved profile paths', () => {
+			expect(parseUrl('https://soundcloud.com/discover')).toBeNull()
+			expect(parseUrl('https://soundcloud.com/upload')).toBeNull()
+			expect(parseUrl('https://soundcloud.com/search')).toBeNull()
 		})
 
 		it('rejects playlist URLs', () => {
@@ -346,6 +406,29 @@ describe('parseUrl', () => {
 			expect(parseUrl('https://example.com/image.jpg')).toBeNull()
 			expect(parseUrl('https://example.com/document.pdf')).toBeNull()
 			expect(parseUrl('https://example.com/style.css')).toBeNull()
+		})
+	})
+
+	describe('URL normalization', () => {
+		it('fixes https: missing slashes', () => {
+			expect(parseUrl('https:youtu.be/dQw4w9WgXcQ')).toEqual({
+				provider: 'youtube',
+				id: 'dQw4w9WgXcQ',
+			})
+		})
+
+		it('fixes http:/ single slash', () => {
+			expect(parseUrl('http:/soundcloud.com/artist/track')).toEqual({
+				provider: 'soundcloud',
+				id: 'artist/track',
+			})
+		})
+
+		it('trims whitespace', () => {
+			expect(parseUrl('  https://youtu.be/dQw4w9WgXcQ  ')).toEqual({
+				provider: 'youtube',
+				id: 'dQw4w9WgXcQ',
+			})
 		})
 	})
 

@@ -2,8 +2,8 @@
  * Discogs provider - fetch release metadata without API key
  */
 
-import { MediaNotFoundError, ProviderError } from '../errors'
-import type { DiscogsResult } from '../types'
+import { MediaNotFoundError, ProviderError } from '../errors.js'
+import type { DiscogsResult } from '../types.js'
 
 /** Discogs release API response */
 interface DiscogsReleaseResponse {

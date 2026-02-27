@@ -2,7 +2,7 @@
  * Pure functions to parse and clean track titles for search queries.
  */
 
-import type { ParsedTitle } from './types'
+import type { ParsedTitle } from './types.js'
 
 /**
  * Primary separator pattern: spaces + dash-like chars + spaces

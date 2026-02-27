@@ -2,8 +2,8 @@
  * Vimeo provider - fetch video metadata without API key
  */
 
-import { MediaNotFoundError, ProviderError } from '../errors'
-import type { VimeoResult } from '../types'
+import { MediaNotFoundError, ProviderError } from '../errors.js'
+import type { VimeoResult } from '../types.js'
 
 /** Vimeo oEmbed API response */
 interface OEmbedResponse {

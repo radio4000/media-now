@@ -2,8 +2,8 @@
  * SoundCloud provider - fetch track metadata without API key via oEmbed
  */
 
-import { MediaNotFoundError, ProviderError } from '../errors'
-import type { SoundCloudResult } from '../types'
+import { MediaNotFoundError, ProviderError } from '../errors.js'
+import type { SoundCloudResult } from '../types.js'
 
 /** SoundCloud oEmbed API response */
 interface OEmbedResponse {

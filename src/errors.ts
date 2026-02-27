@@ -2,7 +2,7 @@
  * Custom error classes for media-now
  */
 
-import type { Provider } from './types'
+import type { Provider } from './types.js'
 
 /** Thrown when media is not found (404) */
 export class MediaNotFoundError extends Error {

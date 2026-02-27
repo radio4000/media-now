@@ -2,7 +2,7 @@
  * File provider — handles direct audio/video URLs
  */
 
-import type { FileResult } from '../types'
+import type { FileResult } from '../types.js'
 
 export const file = {
 	fetch: async (id: string, kind?: string): Promise<FileResult> => ({

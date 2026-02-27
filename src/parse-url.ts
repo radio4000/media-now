@@ -2,7 +2,7 @@
  * URL parsing - extract provider and ID from media URLs
  */
 
-import type { Provider } from './types'
+import type { Provider } from './types.js'
 
 /** Result of parsing a media URL */
 export interface ParsedUrl {
@@ -19,7 +19,13 @@ export interface ParsedUrl {
  */
 export const parseUrl = (url: string): ParsedUrl | null => {
 	try {
-		const normalized = /^https?:\/\//i.test(url) ? url : `https://${url}`
+		// Trim whitespace and fix common protocol typos
+		let fixed = url.trim()
+		// http:/foo → http://foo (single slash)
+		fixed = fixed.replace(/^(https?):\/(?!\/)/, '$1://')
+		// https:foo → https://foo (no slashes)
+		fixed = fixed.replace(/^(https?):(?!\/)/, '$1://')
+		const normalized = /^https?:\/\//i.test(fixed) ? fixed : `https://${fixed}`
 		const parsed = new URL(normalized)
 		return (
 			parseYouTube(parsed) ??
@@ -59,7 +65,7 @@ const parseYouTube = (url: URL): ParsedUrl | null => {
 		return id ? { provider: 'youtube', id } : null
 	}
 
-	// youtube.com and subdomains (m.youtube.com, music.youtube.com, etc.)
+	// youtube.com and subdomains (m.youtube.com, music.youtube.com, studio.youtube.com, etc.)
 	const isYouTube = host === 'youtube.com' || host.endsWith('.youtube.com')
 	if (!isYouTube) return null
 
@@ -75,6 +81,24 @@ const parseYouTube = (url: URL): ParsedUrl | null => {
 	if (match?.[2]) {
 		const id = extractYouTubeId(match[2])
 		return id ? { provider: 'youtube', id } : null
+	}
+
+	// /channel/{channelId}
+	const channelMatch = url.pathname.match(/^\/channel\/([a-zA-Z0-9_-]+)/)
+	if (channelMatch?.[1]) {
+		return { provider: 'youtube', id: channelMatch[1], kind: 'channel' }
+	}
+
+	// /@{handle}
+	const handleMatch = url.pathname.match(/^\/(@[a-zA-Z0-9_.-]+)/)
+	if (handleMatch?.[1]) {
+		return { provider: 'youtube', id: handleMatch[1], kind: 'channel' }
+	}
+
+	// /playlist?list={id}
+	const playlistParam = url.searchParams.get('list')
+	if (url.pathname === '/playlist' && playlistParam) {
+		return { provider: 'youtube', id: playlistParam, kind: 'playlist' }
 	}
 
 	return null
@@ -152,8 +176,8 @@ const parseSoundCloud = (url: URL): ParsedUrl | null => {
 	// Split pathname: /{username}/{track-slug}
 	const segments = url.pathname.slice(1).split('/').filter(Boolean)
 
-	// Need exactly 2 segments: username and track-slug
-	if (segments.length !== 2) return null
+	// Need 1 segment (profile) or 2 segments (track)
+	if (segments.length < 1 || segments.length > 2) return null
 
 	const [username, trackSlug] = segments
 
@@ -173,6 +197,11 @@ const parseSoundCloud = (url: URL): ParsedUrl | null => {
 		'pages',
 	]
 	if (reserved.includes(username)) return null
+
+	// Profile URL: soundcloud.com/{username}
+	if (segments.length === 1) {
+		return { provider: 'soundcloud', id: username, kind: 'profile' }
+	}
 
 	// Reject playlists/sets (username/sets/...)
 	if (trackSlug === 'sets') return null

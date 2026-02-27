@@ -2,8 +2,8 @@
  * Spotify provider - fetch track metadata without API key
  */
 
-import { MediaNotFoundError, ProviderError } from '../errors'
-import type { SpotifyResult } from '../types'
+import { MediaNotFoundError, ProviderError } from '../errors.js'
+import type { SpotifyResult } from '../types.js'
 
 /** Spotify oEmbed API response */
 interface OEmbedResponse {

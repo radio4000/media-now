@@ -2,15 +2,15 @@
  * Main entry point - route URLs to appropriate providers
  */
 
-import { ProviderError } from './errors'
-import { type ParsedUrl, parseUrl } from './parse-url'
-import { discogs } from './providers/discogs'
-import { file } from './providers/file'
-import { soundcloud } from './providers/soundcloud'
-import { spotify } from './providers/spotify'
-import { vimeo } from './providers/vimeo'
-import { youtube } from './providers/youtube'
-import type { MediaResult, Provider } from './types'
+import { ProviderError } from './errors.js'
+import { type ParsedUrl, parseUrl } from './parse-url.js'
+import { discogs } from './providers/discogs.js'
+import { file } from './providers/file.js'
+import { soundcloud } from './providers/soundcloud.js'
+import { spotify } from './providers/spotify.js'
+import { vimeo } from './providers/vimeo.js'
+import { youtube } from './providers/youtube.js'
+import type { MediaResult, Provider } from './types.js'
 
 /** Provider handlers mapped by name */
 const providers: Record<

@@ -2,9 +2,9 @@
  * MusicBrainz provider - search recordings and fetch release data
  */
 
-import { MediaNotFoundError, ProviderError } from '../errors'
-import { parseTitle } from '../parse-title'
-import type { MusicBrainzRelease, MusicBrainzResult } from '../types'
+import { MediaNotFoundError, ProviderError } from '../errors.js'
+import { parseTitle } from '../parse-title.js'
+import type { MusicBrainzRelease, MusicBrainzResult } from '../types.js'
 
 /** MusicBrainz recording search result */
 interface MBRecordingSearchResult {

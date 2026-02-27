@@ -2,8 +2,8 @@
  * YouTube provider - fetch video metadata without API key
  */
 
-import { MediaNotFoundError, ProviderError } from '../errors'
-import type { YouTubeExtendedResult, YouTubeResult } from '../types'
+import { MediaNotFoundError, ProviderError } from '../errors.js'
+import type { YouTubeExtendedResult, YouTubeResult } from '../types.js'
 
 /** YouTube oEmbed API response */
 interface OEmbedResponse {
@@ -71,7 +71,7 @@ export function parseEmbeddedJson(
 }
 
 /** Extract watch page enrichment data from ytInitialData engagement panels */
-function extractWatchPageData(ytData: any) {
+function extractWatchPageData(ytData: Record<string, unknown>) {
 	const data: Record<string, string | undefined> = {}
 	const panels = ytData?.engagementPanels ?? []
 	for (const panel of panels) {
