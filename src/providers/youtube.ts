@@ -73,7 +73,7 @@ export function parseEmbeddedJson(
 /** Extract watch page enrichment data from ytInitialData engagement panels */
 function extractWatchPageData(ytData: Record<string, unknown>) {
 	const data: Record<string, string | undefined> = {}
-	const panels = ytData?.engagementPanels ?? []
+	const panels = (ytData?.engagementPanels ?? []) as Array<Record<string, any>>
 	for (const panel of panels) {
 		const items =
 			panel?.engagementPanelSectionListRenderer?.content
@@ -120,7 +120,7 @@ async function fetchWatchPage(id: string) {
 		const ytData = parseEmbeddedJson(html, 'ytInitialData')
 		if (!ytData) return {}
 
-		return extractWatchPageData(ytData)
+		return extractWatchPageData(ytData as Record<string, unknown>)
 	} catch {
 		return {}
 	}
